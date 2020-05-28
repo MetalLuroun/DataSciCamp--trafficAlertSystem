@@ -1,4 +1,6 @@
 import folium
+from judgeModel import accident
+
 m = folium.Map(location=[39.9042, 116.4074], tiles="OpenStreetMap", zoom_start=10)
 
 for i in range(accident.shape[0]):

@@ -9,7 +9,7 @@ from scipy.optimize import leastsq
 from scipy import stats
 from scipy.stats import norm
 
-filePath = "D://Data Mining/寒假营/数据/"
+filePath = "16-28Data/"
 
 def runFile(name):
     data = pd.read_csv(filePath + name, header=None, encoding="gbk")
@@ -22,7 +22,7 @@ def runFile(name):
 from sklearn.decomposition import NMF
 
 def NMF_decomposition(data, n_components):
-    model = NMF(n_components=n_components, random_state=0, init='nndsvd')
+    model = NMF(n_components = n_components, random_state = 0 , init = 'nndsvd')
     Matrix_M = model.fit_transform(data)
     Matrix_H = model.components_
     return Matrix_M, Matrix_H
@@ -220,7 +220,7 @@ def train_model(data,cluster_index):
 # labels=prediction.labels_      #得到该数据的具体分类
 # print("得到了20111115.csv的聚类类别为：",labels)
 
-data_matrix=pd.read_csv("D://Data Mining/寒假营/数据/20111116.csv",header=None)
+data_matrix=pd.read_csv("16-28Data/20111116.csv",header=None)
 data_matrix=data_matrix.iloc[:,3:]
 # data_matrix.columns=data_matrix.columns-3
 # data_matrix=concatColumns(data_matrix)
@@ -231,17 +231,17 @@ for each in fileList:
     data_matrix += runFile(each)
 data_matrix = data_matrix / 9  # 九天的流量平均数
 data_matrix_M,data_matrix_H=NMF_decomposition(data_matrix,3)
-pd.DataFrame(data_matrix_M).to_csv("D://Experiment/data_matrix_M.csv",header=None)
-pd.DataFrame(data_matrix_H).to_csv("D://Experiment/data_matrix_H.csv",header=None)
+pd.DataFrame(data_matrix_M).to_csv("Experiment/data_matrix_M.csv",header=None)
+pd.DataFrame(data_matrix_H).to_csv("Experiment/data_matrix_H.csv",header=None)
 prediction=kMeans(250,data_matrix_M)
 labels=prediction.labels_
-print("得到了20111115.csv的聚类类别为：",labels)
+# print("得到了20111115.csv的聚类类别为：",labels)
 
 indexset=findFittableIndex(labels,250)
-print("得到了每个类中具体包含了哪些值",indexset)
+# print("得到了每个类中具体包含了哪些值",indexset)
 
 #开始读取数据
-target=pd.read_csv("D://Experiment4/20111128.csv",header=None)
+target=pd.read_csv("16-28Data/20111128.csv",header=None)
 target=target.iloc[:,3:]
 target.columns=target.columns-3
 target=concatColumns(target)
@@ -253,11 +253,11 @@ for i in range(target.shape[0]):
     tem_lst=[]
     for j in range(target.shape[1]):
         tem_lst.append(getPro(finalmodel[cluster][j],target[i][j]))
-        print(str(i)+" "+str(j)+"结束！")
+        # print(str(i)+" "+str(j)+"结束！")
     storage_probability.append(tem_lst)
 
 df=pd.DataFrame(storage_probability)
-df.to_csv("D://Experiment2/邻居道路得分.csv",header=None)
+df.to_csv("Experiment/邻居道路得分.csv",header=None)
 ##############################################################
 
 #historical score
@@ -269,7 +269,7 @@ df.to_csv("D://Experiment2/邻居道路得分.csv",header=None)
 
 def searchAllMatrix():
     matrix_list=[]
-    data_matrix = pd.read_csv("D://Data Mining/寒假营/数据/20111116.csv", header=None)
+    data_matrix = pd.read_csv("16-28Data/20111116.csv", header=None)
     data_matrix = data_matrix.iloc[:, 3:]
     data_matrix.columns=data_matrix.columns-3
     data_matrix=concatColumns(data_matrix)
@@ -279,7 +279,7 @@ def searchAllMatrix():
     filelist = os.listdir(filePath)
     filelist.pop(0)
     for each in filelist:
-        data_matrix=pd.read_csv("D://Data Mining/寒假营/数据/"+each,header=None)
+        data_matrix=pd.read_csv("16-28Data/"+each,header=None)
         data_matrix=data_matrix.iloc[:,3:]
         data_matrix=data_matrix.values
         matrix_list.append(data_matrix)
@@ -320,7 +320,7 @@ def building_model(data):
 
 storage_probability2=building_model(target)
 df2=pd.DataFrame(storage_probability2)
-df2.to_csv("D://Experiment2/历史道路得分.csv",header=None)
+df2.to_csv("Experiment/历史道路得分.csv",header=None)
 
 def getScoreMatrix(matrix1,matrix2,beita):  #beita=β
     score_matrix=beita*matrix1+(1-beita)*matrix2
@@ -330,6 +330,6 @@ result1=np.array(storage_probability)
 result2=np.array(storage_probability2)
 score_matrix=getScoreMatrix(result1,result2,1)
 df3=pd.DataFrame(score_matrix)
-df3.to_csv("D://Experiment3/总得分.csv",header=None)
+df3.to_csv("Experiment/总得分.csv",header=None)
 
 

@@ -1,11 +1,11 @@
 '''
 只跑一遍
 '''
-import osmnx as ox
-import os
+# import osmnx as ox
+# import os
 
-G = ox.graph_from_place('Beijing, China',network_type = 'drive',which_result=2)
-ox.save_graphml(G, filename='BeijingStreetMap') #将数据储存到文件BeijingStreetMap中
+# G = ox.graph_from_place('Beijing, China',network_type = 'drive',which_result=2)
+# ox.save_graphml(G) #将数据储存到文件BeijingStreetMap中
 
 import osmnx as ox
 import os
@@ -37,14 +37,16 @@ def getAllNeighbor(nodeList,G):
 
 
 def getAllTimeNeighbor(predict,G):
-	'''
-	得到所有路段的时间点
-	G为地图
-	'''
-	neighbor={}
+    neighbor={}
     for i in range(predict.shape[0]):
+
         neighbor[i]=getAllNeighbor([predict["id1"][i],predict["id2"][i]],G)
     return neighbor
+'''
+得到所有路段的时间点
+G为地图
+'''
+	
 
 '''
 根据accident数据找到所有最近点
@@ -89,9 +91,9 @@ def getFinalMartrix(test,data,threshold):
 	
 
 G = ox.load_graphml('BeijingStreetMap')
-test = pd.read_csv(".\\test\\Flow20111129.csv",header=None)	#导入测试矩阵
-data = pd.read_csv(".\\result.csv")		#导入概率矩阵
-accident = getAccidentData(".\\test\\Accident20111129.csv")
+test = pd.read_csv("16-28Data/20111128.csv",header=None)	#导入测试矩阵
+data = pd.read_csv("Experiment/总得分.csv")		#导入概率矩阵
+accident = getAccidentData("Test/事故数据21-28/n_11.28.csv") #导入真实数据
 Time_id = getAllNearestId(accident) #找到事故发生点的点的ID
 predict=getFinalMartrix(test,data,0.025) #通过概率函数获得预测矩阵
 timeSegment = predict["time"]
